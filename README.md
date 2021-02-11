@@ -3,7 +3,8 @@ A fun and exciting single player biological action game.
 
 # Introduction
 
-Hi, this is my dream project. It is a single player biological action game, created using python with the help of the pygame library. 
+This is a single-player biological action 'edugame' game, created using python with the help of the pygame library. The goal behind this project is to create a game that teaches basic biological concepts about the immune system in a fun way. 
+
 I will also create a javascript version of the game, using the p5.js framework. 
 
 # Basics of the game
