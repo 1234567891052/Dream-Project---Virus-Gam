@@ -1,39 +1,46 @@
-import pygame, random, os
-pygame.init() 
+import pygame, os, random
+import antibody, pathogen 
 
-WIDTH, HEIGHT = 600, 600
-WIN = pygame.display.set_mode((WIDTH, HEIGHT)) 
-BACKGROUND_COLOR = (0, 0, 0) 
-CAPTION_IMAGE = pygame.image.load(os.path.join('Assets', 'virus.png')) 
-pygame.display.set_caption('Game Terminal') 
-pygame.display.set_icon(CAPTION_IMAGE) 
+WIDTH = HEIGHT = 600
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+BACKGROUND_COLOR = (0, 0, 0)
+ICON_IMG = pygame.image.load(os.path.join('Assets', 'virus.png'))
+FPS = 60 
 
-class Player():
-    def __init__(self):
-        self.width = self.height = 20 
-        self.pos = pygame.math.Vector2(WIDTH/2 - self.width/2, HEIGHT/5 - self.height/2) 
-        self.color = (0,0,255) 
+pygame.display.set_caption('GAME WINDOW')
+pygame.display.set_icon(ICON_IMG)
 
-    def render(self):
-        pygame.draw.rect(WIN, self.color, (self.pos.x, self.pos.y, self.width, self.height)) 
+player = antibody.Antibody()
 
-    def move(self, x_vel, y_vel):
-        self.pos.x += x_vel
-        self.pos.y += y_vel 
-
-player = Player() 
+pathogens = []
+PATHOGEN_LIMIT = 5
+for i in range(PATHOGEN_LIMIT):
+    pathogen_body = pathogen.Pathogen(random.randint(15, WIDTH - 15), random.randint(HEIGHT - 15, HEIGHT + 15)) 
+    pathogens.append(pathogen_body) 
 
 def draw():
-    WIN.fill(BACKGROUND_COLOR) 
-    player.render() 
+    WIN.fill(BACKGROUND_COLOR)
 
+    player.update(WIN)
+    player_temp = pygame.Rect(player.x, player.y, player.side, player.side)
+    
+    for i in pathogens:
+        i.update(WIN)
+        i_temp = pygame.Rect(i.x, i.y, i.side, i.side)
+
+        if player_temp.colliderect(i_temp):
+            pathogens.remove(i) 
+
+clock = pygame.time.Clock()
 run = True
+
 while run:
+    clock.tick(FPS) 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
     
-    draw() 
-    pygame.display.update() 
-
+    draw()
+    pygame.display.update()
+    
 pygame.quit() 
