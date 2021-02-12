@@ -1,5 +1,5 @@
 import pygame, os, random
-import antibody, pathogen 
+import player
 
 WIDTH = HEIGHT = 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -10,26 +10,13 @@ FPS = 60
 pygame.display.set_caption('GAME WINDOW')
 pygame.display.set_icon(ICON_IMG)
 
-player = antibody.Antibody()
-
-pathogens = []
-PATHOGEN_LIMIT = 5
-for i in range(PATHOGEN_LIMIT):
-    pathogen_body = pathogen.Pathogen(random.randint(15, WIDTH - 15), random.randint(HEIGHT - 15, HEIGHT + 15)) 
-    pathogens.append(pathogen_body) 
+monocyte = player.Monocyte()
+lyphocyte = player.Lyphocyte()    
 
 def draw():
     WIN.fill(BACKGROUND_COLOR)
-
-    player.update(WIN)
-    player_temp = pygame.Rect(player.x, player.y, player.side, player.side)
-    
-    for i in pathogens:
-        i.update(WIN)
-        i_temp = pygame.Rect(i.x, i.y, i.side, i.side)
-
-        if player_temp.colliderect(i_temp):
-            pathogens.remove(i) 
+    # monocyte.update(WIN) 
+    lyphocyte.update(WIN) 
 
 clock = pygame.time.Clock()
 run = True
