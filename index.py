@@ -1,36 +1,36 @@
 import pygame, os, random
-import antibody, pathogen 
+import leycocyte, pathogen
 
-WIDTH = HEIGHT = 600
+WIDTH = HEIGHT = 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 BACKGROUND_COLOR = (0, 0, 0)
 ICON_IMG = pygame.image.load(os.path.join('Assets', 'virus.png'))
-FPS = 60 
+FPS = 60  
 
 pygame.display.set_caption('GAME WINDOW')
 pygame.display.set_icon(ICON_IMG)
 
-player = antibody.Antibody()
+macrophage = leycocyte.Macrophage(WIDTH / 2, HEIGHT / 6)
+neutrophil = leycocyte.Neutrophil(WIDTH / 2, HEIGHT / 4)
 
-pathogens = []
-PATHOGEN_LIMIT = 5
-for i in range(PATHOGEN_LIMIT):
-    pathogen_body = pathogen.Pathogen(random.randint(15, WIDTH - 15), random.randint(HEIGHT - 15, HEIGHT + 15)) 
-    pathogens.append(pathogen_body) 
+bacteria = pathogen.Bacteria()
+bacteria.initialise(WIDTH, HEIGHT)
+
+fungi = pathogen.Fungi()
+fungi.initialise(WIDTH, HEIGHT) 
 
 def draw():
     WIN.fill(BACKGROUND_COLOR)
 
-    player.update(WIN)
-    player_temp = pygame.Rect(player.x, player.y, player.side, player.side)
+    # macrophage.update(WIN, WIDTH, HEIGHT)
+    # macrophage.kill_pathogen(bacteria.bodies)
+    # macrophage.kill_pathogen(fungi.bodies)
     
-    for i in pathogens:
-        i.update(WIN)
-        i_temp = pygame.Rect(i.x, i.y, i.side, i.side)
+    neutrophil.update(WIN, WIDTH, HEIGHT, bacteria.bodies, fungi.bodies) 
 
-        if player_temp.colliderect(i_temp):
-            pathogens.remove(i) 
-
+    bacteria.update(WIN, HEIGHT)
+    fungi.update(WIN, HEIGHT) 
+    
 clock = pygame.time.Clock()
 run = True
 
