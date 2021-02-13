@@ -1,5 +1,5 @@
 import pygame, os, random
-import leycocyte
+import leycocyte, pathogen
 
 WIDTH = HEIGHT = 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -10,14 +10,27 @@ FPS = 60
 pygame.display.set_caption('GAME WINDOW')
 pygame.display.set_icon(ICON_IMG)
 
-neutrophil = leycocyte.Neutorphil(WIDTH / 2, HEIGHT / 6)
-eosionphil = leycocyte.Eosionphil(WIDTH / 2, HEIGHT / 4)
+macrophage = leycocyte.Macrophage(WIDTH / 2, HEIGHT / 6)
+neutrophil = leycocyte.Neutrophil(WIDTH / 2, HEIGHT / 4)
+
+bacteria = pathogen.Bacteria()
+bacteria.initialise(WIDTH, HEIGHT)
+
+fungi = pathogen.Fungi()
+fungi.initialise(WIDTH, HEIGHT) 
 
 def draw():
     WIN.fill(BACKGROUND_COLOR)
-    neutrophil.update(WIN, WIDTH, HEIGHT)
-    eosionphil.update(WIN, WIDTH, HEIGHT) 
 
+    # macrophage.update(WIN, WIDTH, HEIGHT)
+    # macrophage.kill_pathogen(bacteria.bodies)
+    # macrophage.kill_pathogen(fungi.bodies)
+    
+    neutrophil.update(WIN, WIDTH, HEIGHT, bacteria.bodies, fungi.bodies) 
+
+    bacteria.update(WIN, HEIGHT)
+    fungi.update(WIN, HEIGHT) 
+    
 clock = pygame.time.Clock()
 run = True
 
@@ -26,10 +39,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and eosionphil.chemical_limit > 0:
-                eosionphil.release_chemicals(WIN)
-                print('hu')
+    
     draw()
     pygame.display.update()
     
